@@ -1,0 +1,14 @@
+# Local build customizations
+local.mk
+
+# Python stuff
+__pycache__/
+*.py[cod]
+*$py.class
+build/
+dist/
+.venv/
+venv/
+
+*.log
+
