@@ -86,12 +86,11 @@ labvm_commit:
 	rm -rf "$(LAB_VM_OUT_DIR)_tmp/"
 
 QEMU_NBD_DEV=nbd0
-lab_vm_zerofree:
+labvm_zerofree:
 	sudo qemu-nbd -c "/dev/$(QEMU_NBD_DEV)" "$(LAB_VM_OUT_IMAGE)"
-	sudo zerofree "/dev/$(QEMU_NBD_DEV)p1"
-	sudo qemu-nbd -d "/dev/$(QEMU_NBD_DEV)"
+	sudo zerofree "/dev/$(QEMU_NBD_DEV)p2"; sudo qemu-nbd -d "/dev/$(QEMU_NBD_DEV)"
 
-labvm_export_vmdk:
+labvm_vmdk:
 	qemu-img convert -O vmdk "$(LAB_VM_OUT_IMAGE)" "$(LAB_VM_OUT_DIR)/$(LAB_VM_NAME).vmdk"
 
 # Yocto Build VM (beware: requires ~30GB of disk space available!)
@@ -113,6 +112,13 @@ yoctovm_commit:
 	qemu-img commit "$(YOCTO_VM_TMP_OUT_IMAGE)"
 	rm -rf "$(YOCTO_VM_OUT_DIR)_tmp/"
 
+yoctovm_zerofree:
+	sudo qemu-nbd -c "/dev/$(QEMU_NBD_DEV)" "$(YOCTO_VM_OUT_IMAGE)"
+	sudo zerofree "/dev/$(QEMU_NBD_DEV)p2"; sudo qemu-nbd -d "/dev/$(QEMU_NBD_DEV)"
+
+yoctovm_vmdk:
+	qemu-img convert -O vmdk "$(YOCTO_VM_OUT_IMAGE)" "$(YOCTO_VM_OUT_DIR)/$(YOCTO_VM_NAME).vmdk"
+
 # ssh into a packer/qemu VM (note: only lab-vm-derived images support this)
 ssh:
 	$(SSH) $(SSH_ARGS) student@127.0.0.1 -p 20022
@@ -124,7 +130,7 @@ cloudvm: $(CLOUD_VM_OUT_IMAGE)
 $(CLOUD_VM_OUT_IMAGE): $(wildcard $(CLOUD_VM_SRC)/**) | $(LAB_VM_OUT_IMAGE)
 	$(call packer_gen_build, $(CLOUD_VM_SRC), \
 		$(CLOUD_VM_NAME), $(LAB_VM_OUT_IMAGE))
-	qemu-img convert -O qcow2 "$(CLOUD_VM_OUT_IMAGE)" "$(CLOUD_VM_OUT_DIR)/$(CLOUD_VM_NAME)_big.qcow2"
+	qemu-img convert -O qcow2 "$(CLOUD_VM_OUT_IMAGE)" "$(CLOUD_VM_OUT_DIR)/$(CLOUD_VM_NAME)_full.qcow2"
 
 # VM backing an already generated RL scripts image (saving time to edit it)
 cloudvm_edit: | $(CLOUD_VM_OUT_IMAGE)
