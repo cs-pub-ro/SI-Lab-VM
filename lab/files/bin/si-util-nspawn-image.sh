@@ -1,5 +1,6 @@
 #!/bin/bash
 # Runs an image inside a systemd-nspawn container (using qemu-user-static)
+# Note: the image should have the partitions: 1: boot, 2: rootfs
 
 IMAGE="$1"
 MOUNTPOINT=/tmp/si-lab-rpi-mnt

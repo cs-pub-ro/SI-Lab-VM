@@ -26,7 +26,7 @@ source "qemu" "si-lab-vm" {
   // Virtual Hardware Specs
   memory         = 1024
   cpus           = 2
-  disk_size      = 8000
+  disk_size      = 15000
   disk_interface = "virtio"
   net_device     = "virtio-net"
   // disk usage optimizations (unmap zeroes as free space)
@@ -54,9 +54,19 @@ build {
   sources = ["sources.qemu.si-lab-vm"]
 
   provisioner "shell" {
-    scripts = [
-      "scripts/01-packages.sh",
-      "scripts/90-cleanup.sh",
+    inline = [
+      "rm -rf /home/student/install",
+      "mkdir -p /home/student/install",
+    ]
+  }
+  provisioner "file" {
+    source = "files/"
+    destination = "/home/student/install"
+  }
+  provisioner "shell" {
+    inline = [
+      "chmod +x /home/student/install/install.sh",
+      "/home/student/install/install.sh"
     ]
     execute_command = "{{.Vars}} sudo -E -S bash -ex '{{.Path}}'"
   }
