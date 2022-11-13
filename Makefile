@@ -12,6 +12,7 @@ SSH = ssh
 SSH_ARGS = 
 
 # Fresh Ubuntu 22.04 base install
+EXISTING_BASE_VM_PATH :=
 BASE_VM_NAME = ubuntu_22_base
 BASE_VM_SRC = base/
 BASE_VM_OUT_DIR = $(TMP_DIR)/$(BASE_VM_NAME)
@@ -22,6 +23,12 @@ LAB_VM_NAME = SI_2022
 LAB_VM_SRC = lab/
 LAB_VM_OUT_DIR = $(TMP_DIR)/$(LAB_VM_NAME)
 LAB_VM_OUT_IMAGE = $(LAB_VM_OUT_DIR)/$(LAB_VM_NAME).qcow2
+
+# main lab VM image (from BASE_VM)
+YOCTO_VM_NAME = SI_Yocto_2022
+YOCTO_VM_SRC = yocto/
+YOCTO_VM_OUT_DIR = $(TMP_DIR)/$(YOCTO_VM_NAME)
+YOCTO_VM_OUT_IMAGE = $(YOCTO_VM_OUT_DIR)/$(YOCTO_VM_NAME).qcow2
 
 # cloud-targeted image (from on LAB_VM)
 CLOUD_VM_NAME = SI_2022_cloud
@@ -47,16 +54,20 @@ define packer_gen_build
 endef
 
 # Base image
+ifeq ($(EXISTING_BASE_VM_PATH),)
 base: $(BASE_VM_OUT_IMAGE)
 $(BASE_VM_OUT_IMAGE): $(wildcard $(BASE_VM_SRC)/**) | $(TMP_DIR)/.empty
 	$(call packer_gen_build, $(BASE_VM_SRC), \
 		$(BASE_VM_NAME), $(OS_INSTALL_ISO))
 base_clean:
 	rm -rf "$(dir $(BASE_VM_OUT_IMAGE))/"
+else
+BASE_VM_OUT_IMAGE := $(EXISTING_BASE_VM_PATH)
+endif
 
-# RL scripts VM
+# SI Lab VM
 labvm: $(LAB_VM_OUT_IMAGE)
-$(LAB_VM_OUT_IMAGE): $(wildcard $(LAB_VM_SRC)/**) | $(BASE_VM_OUT_DIR)
+$(LAB_VM_OUT_IMAGE): $(wildcard $(LAB_VM_SRC)/**) | $(BASE_VM_OUT_IMAGE)
 	$(call packer_gen_build, $(LAB_VM_SRC), \
 		$(LAB_VM_NAME), $(BASE_VM_OUT_IMAGE))
 
@@ -82,6 +93,25 @@ lab_vm_zerofree:
 
 labvm_export_vmdk:
 	qemu-img convert -O vmdk "$(LAB_VM_OUT_IMAGE)" "$(LAB_VM_OUT_DIR)/$(LAB_VM_NAME).vmdk"
+
+# Yocto Build VM (beware: requires ~30GB of disk space available!)
+yoctovm: $(YOCTO_VM_OUT_IMAGE)
+$(YOCTO_VM_OUT_IMAGE): $(wildcard $(YOCTO_VM_SRC)/**) | $(LAB_VM_OUT_DIR)
+	$(call packer_gen_build, $(YOCTO_VM_SRC), \
+		$(YOCTO_VM_NAME), $(LAB_VM_OUT_IMAGE))
+yoctovm_clean:
+	rm -rf "$(dir $(YOCTO_VM_OUT_IMAGE))/"
+
+# Quickly edit an already-generated Yocto VM image
+yoctovm_edit: PAUSE=1
+yoctovm_edit:
+	$(call packer_gen_build, $(YOCTO_VM_SRC), \
+		$(YOCTO_VM_NAME)_tmp, $(YOCTO_VM_OUT_IMAGE))
+# commits the edited image back to the original qcow2
+YOCTO_VM_TMP_OUT_IMAGE = $(YOCTO_VM_OUT_DIR)_tmp/$(YOCTO_VM_NAME)_tmp.qcow2
+yoctovm_commit:
+	qemu-img commit "$(YOCTO_VM_TMP_OUT_IMAGE)"
+	rm -rf "$(YOCTO_VM_OUT_DIR)_tmp/"
 
 # ssh into a packer/qemu VM (note: only lab-vm-derived images support this)
 ssh:
