@@ -36,6 +36,14 @@ bblayers_conf_header:
 
 # prepend those lines to the generated local.conf
 local_conf_header:
+  # RPI + Qemu compatibility
+  rpi_compat: |
+    # Note: image size must be a power of 2, given in KB
+    IMAGE_ROOTFS_SIZE = "524288"
+    IMAGE_FSTYPES = "wic"
+    #PACKAGE_EXCLUDE = "pi-bluetooth"
+    IMAGE_INSTALL:remove = "pi-bluetooth bluez5 bluez-firmware-rpidistro"
+    BBMASK += "/meta-raspberrypi/recipes-connectivity/"
   tmp_dirs: |
     # temporary dirs
     DL_DIR = "/home/student/tmp/downloads"

@@ -24,8 +24,8 @@ source "qemu" "si-yocto-vm" {
   headless      = false
 
   // Virtual Hardware Specs (NOTE: Yocto build requires huge resources!)
-  memory         = 12288
-  cpus           = 6
+  memory         = 16384
+  cpus           = 8
   disk_size      = 50000
   disk_interface = "virtio"
   net_device     = "virtio-net"
