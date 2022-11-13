@@ -28,11 +28,12 @@ order):
 
 - `base`: builds a base Ubuntu 18.04 install (required for the VM image);
 - `labvm`: builds the Lab VM with all required scripts and config;
-- `labvm_edit`: easily edit an already build Lab VM (uses the previous
+- `yoctovm`: builds the Yocto Lab VM (note: it's very large);
+- `[*]vm_edit`: easily edit an already build Lab VM (uses the previous
   image as backing snapshot);
-- `labvm_commit`: commits the edited VM back to its `labvm` base;
+- `[*]vm_commit`: commits the edited VM back to its backing image;
+- `[*]_clean`: removes the generated image(s);
 - `ssh`: SSH-es into a running Packer VM;
-- `*_clean`: removes the generated image(s);
 
 If packer complains about the output file existing, you must either manually
 delete the generated VM from inside `TMP_DIR`, or set the `DELETE=1` makefile
