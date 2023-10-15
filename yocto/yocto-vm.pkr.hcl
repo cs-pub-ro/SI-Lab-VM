@@ -30,8 +30,8 @@ source "qemu" "si-yocto-vm" {
   disk_interface = "virtio"
   net_device     = "virtio-net"
   // disk usage optimizations (unmap zeroes as free space)
-  disk_discard       = "unmap"
-  disk_detect_zeroes = "unmap"
+  /* disk_discard   = "unmap" */
+  /* disk_detect_zeroes = "unmap" */
   // skip_compaction = true
   
   // ISO & Output details
