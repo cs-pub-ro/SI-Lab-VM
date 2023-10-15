@@ -3,7 +3,7 @@
 
 apt-get -y -qq update
 
-apt-get -y install python3-pip
+apt-get -y install python3-pip pipx
 
 # Embedded development tools
 apt-get -y -qq install build-essential curl qemu qemu-system-aarch64 qemu-user \
