@@ -25,7 +25,7 @@ source "qemu" "ubuntu-22-base" {
   headless      = false
 
   // Virtual Hardware Specs
-  memory         = 1024
+  memory         = 2048
   cpus           = 2
   disk_size      = 8000
   disk_interface = "virtio"

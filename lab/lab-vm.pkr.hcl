@@ -24,7 +24,7 @@ source "qemu" "si-lab-vm" {
   headless      = false
 
   // Virtual Hardware Specs
-  memory         = 1024
+  memory         = 2048
   cpus           = 2
   disk_size      = 15000
   disk_interface = "virtio"
