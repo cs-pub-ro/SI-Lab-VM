@@ -14,7 +14,7 @@ apt-get -y -qq install build-essential curl qemu qemu-system-aarch64 qemu-user \
 apt-get -y -qq install gettext libncursesw5-dev automake  \
 	libtool pkg-config gperf genromfs libgmp-dev libmpc-dev libmpfr-dev libisl-dev \
 	binutils-dev libelf-dev libexpat-dev gcc-multilib g++-multilib picocom u-boot-tools \
-	chrony libusb-dev libusb-1.0.0-dev kconfig-frontends python3-pip
+	chrony libusb-dev libusb-1.0.0-dev python3-pip kconfig-frontends-nox
 
 # Linux kernel dependencies
 apt-get -y -qq install git fakeroot build-essential \

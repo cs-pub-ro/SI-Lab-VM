@@ -1,6 +1,8 @@
 #!/bin/bash
 
-XTENSA_TOOLCHAIN_URL="https://github.com/espressif/crosstool-NG/releases/download/esp-12.2.0_20230208/xtensa-esp32-elf-12.2.0_20230208-x86_64-linux-gnu.tar.xz"
+_URL="https://github.com/espressif/crosstool-NG/releases/download"
+_VERSION=14.2.0_20240906
+XTENSA_TOOLCHAIN_URL="$_URL/esp-$_VERSION/xtensa-esp-elf-$_VERSION-x86_64-linux-gnu.tar.xz"
 
 # Download & install XTensa cross-compiler
 if [[ ! -d "/opt/xtensa" ]]; then
