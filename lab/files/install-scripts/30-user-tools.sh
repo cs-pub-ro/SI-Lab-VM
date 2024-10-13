@@ -1,5 +1,7 @@
 #!/bin/bash
 
+[[ "$VM_INSTALL" != "null" ]] || exit 0
+
 # give student user permissions to serial devices
 usermod -a -G dialout student
 

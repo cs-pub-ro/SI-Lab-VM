@@ -11,7 +11,8 @@ variables {
   vm_name = "labvm"
   vm_pause = 0
   vm_debug = 0
-  vm_noinstall = 0
+  vm_install = "default"
+  disk_size = 8192
   qemu_unmap = true
   qemu_ssh_forward = 20022
   source_image = "./path/to/ubuntu-22-base.qcow2"
@@ -25,7 +26,7 @@ variables {
 locals {
   envs = [
     "VM_DEBUG=${var.vm_debug}",
-    "VM_NOINSTALL=${var.vm_noinstall}",
+    "VM_INSTALL=${var.vm_install}",
     "INSTALL_DIR=/home/student/install"
   ]
   sudo = "{{.Vars}} sudo -E -S bash -e '{{.Path}}'"
@@ -39,7 +40,7 @@ source "qemu" "labvm" {
   // Virtual Hardware Specs
   memory         = 2048
   cpus           = 2
-  disk_size      = 51200
+  disk_size      = var.disk_size
   disk_interface = "virtio"
   net_device     = "virtio-net"
   // disk usage optimizations (unmap zeroes as free space)

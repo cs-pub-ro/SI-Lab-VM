@@ -11,7 +11,7 @@ variables {
   vm_name = "labvm"
   vm_pause = 0
   vm_debug = 0
-  vm_noinstall = 0
+  vm_install = "default"
   qemu_unmap = true
   qemu_ssh_forward = 20022
   source_image = "./path/to/ubuntu-22-base.qcow2"
@@ -25,7 +25,7 @@ variables {
 locals {
   envs = [
     "VM_DEBUG=${var.vm_debug}",
-    "VM_NOINSTALL=${var.vm_noinstall}",
+    "VM_INSTALL=${var.vm_install}",
     "INSTALL_DIR=/home/student/install"
   ]
   sudo = "{{.Vars}} sudo -E -S bash -e '{{.Path}}'"

@@ -5,14 +5,12 @@
 set -eo pipefail
 export SRC="$(cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd)"
 
+[[ "$VM_INSTALL" != "null" ]] || exit 0
+
 source "$SRC/_utils.sh"
 export DEBIAN_FRONTEND=noninteractive
 
 vm_wait_for_boot
-
-if [[ "$VM_NOINSTALL" == "1" ]]; then
-	exit 0
-fi
 
 # generate locales
 locale-gen "en_US.UTF-8"

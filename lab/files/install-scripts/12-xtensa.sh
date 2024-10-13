@@ -1,5 +1,7 @@
 #!/bin/bash
 
+[[ "$VM_INSTALL" != "null" ]] || exit 0
+
 _URL="https://github.com/espressif/crosstool-NG/releases/download"
 _VERSION=14.2.0_20240906
 XTENSA_TOOLCHAIN_URL="$_URL/esp-$_VERSION/xtensa-esp-elf-$_VERSION-x86_64-linux-gnu.tar.xz"

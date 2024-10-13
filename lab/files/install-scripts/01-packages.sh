@@ -1,6 +1,8 @@
 #!/bin/bash
 # Installs debian packages
 
+[[ "$VM_INSTALL" != "null" ]] || exit 0
+
 apt-get -y -qq update
 
 apt-get -y install python3-pip pipx

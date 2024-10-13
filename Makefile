@@ -8,6 +8,8 @@ include $(FRAMEWORK_DIR)/framework.mk
 DEFAULT_GOAL = labvm
 INIT_GOAL = labvm
 
+SUDO = sudo
+
 # Fresh Ubuntu Server base VM
 ubuntu-ver = 22
 basevm-name = ubuntu_$(ubuntu-ver)_base
@@ -21,6 +23,15 @@ labvm-ver = $(SI_LABVM_VERSION)
 labvm-name = SI_$(labvm-ver)
 labvm-packer-src = ./lab
 labvm-src-from = basevm
+define labvm-extra-rules=
+.PHONY: labvm_compact
+labvm-compact-guard := $(-vm-dest-dir)/.compacted
+labvm_compact: $$(labvm-compact-guard)
+$$(labvm-compact-guard): $(-vm-dest-timestamp)
+	$(SUDO) "$(FRAMEWORK_DIR)/utils/zerofree.sh" "$$(labvm-dest-image)"
+	touch "$$@" 
+
+endef
 
 # SI Lab VM with full Yocto build (warning: it's HUGE!)
 yocto-ver = $(SI_LABVM_VERSION)
