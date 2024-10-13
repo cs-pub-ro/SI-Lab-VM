@@ -33,6 +33,16 @@ $$(labvm-compact-guard): $(-vm-dest-timestamp)
 
 endef
 
+release-ver = $(SI_LABVM_VERSION)
+release-name = SI_$(labvm-ver)_Release
+release-packer-src = ./lab
+release-packer-args = -var 'disk_size=51200' -var 'vm_install=null'
+release-src-from = labvm
+release-src-deps = $(labvm-compact-guard)
+
+include vmscripts/genvm.mk
+release-extra-rules += $(vmware-template-rules)
+
 # SI Lab VM with full Yocto build (warning: it's HUGE!)
 yocto-ver = $(SI_LABVM_VERSION)
 yocto-name = SI_Yocto_$(labvm-ver)
@@ -45,7 +55,7 @@ cloudvm-packer-src = $(FRAMEWORK_DIR)/cloudvm
 cloudvm-src-from = labvm
 
 # list with all VMs to generate rules for (note: use dependency ordering!)
-build-vms += basevm labvm yocto cloudvm
+build-vms += basevm labvm release yocto cloudvm
 
 $(call eval_common_rules)
 $(call eval_all_vm_rules)
