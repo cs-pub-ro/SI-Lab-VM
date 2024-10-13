@@ -1,4 +1,4 @@
-# Makefile templates to generate VM project files
+# Makefile templates to generate VMware project files
 
 -vmware-build-dir = $(BUILD_DIR)/$(labvm-name)_vmware
 
@@ -65,6 +65,8 @@ ethernet0.addressType = "generated"
 ethernet0.virtualDev = "e1000"
 ethernet0.present = "TRUE"
 floppy0.present = "FALSE"
+vhv.enable = "TRUE"
+ehci.present = "TRUE"
 endef
 
 define vmware-template-rules=

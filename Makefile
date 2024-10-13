@@ -40,8 +40,9 @@ release-packer-args = -var 'disk_size=51200' -var 'vm_install=null'
 release-src-from = labvm
 release-src-deps = $(labvm-compact-guard)
 
-include vmscripts/genvm.mk
-release-extra-rules += $(vmware-template-rules)
+include vmscripts/gen_vmware.mk
+include vmscripts/gen_vbox.mk
+release-extra-rules += $(vmware-template-rules) $(vbox-template-rules)
 
 # SI Lab VM with full Yocto build (warning: it's HUGE!)
 yocto-ver = $(SI_LABVM_VERSION)
