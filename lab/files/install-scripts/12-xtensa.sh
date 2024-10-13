@@ -7,12 +7,12 @@ XTENSA_TOOLCHAIN_URL="$_URL/esp-$_VERSION/xtensa-esp-elf-$_VERSION-x86_64-linux-
 # Download & install XTensa cross-compiler
 if [[ ! -d "/opt/xtensa" ]]; then
 (
-	mkdir -p /tmp/xtensa-esp32-download/
-	cd /tmp/xtensa-esp32-download/
-	wget -qO "xtensa-esp32.tar.xz" "$XTENSA_TOOLCHAIN_URL"
+	mkdir -p /tmp/xtensa-esp-download/
+	cd /tmp/xtensa-esp-download/
+	wget -qO "xtensa-esp.tar.xz" "$XTENSA_TOOLCHAIN_URL"
 	mkdir -p /opt/xtensa
-	tar -xf "xtensa-esp32.tar.xz" -C "/opt/xtensa"
-	echo 'export PATH=$PATH:/opt/xtensa/xtensa-esp32-elf/bin' > /etc/profile.d/xtensa.sh
+	tar -xf "xtensa-esp.tar.xz" -C "/opt/xtensa"
+	echo 'export PATH=$PATH:/opt/xtensa/xtensa-esp-elf/bin' > /etc/profile.d/xtensa.sh
 )
 fi
 
