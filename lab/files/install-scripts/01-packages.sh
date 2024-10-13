@@ -6,9 +6,12 @@ apt-get -y -qq update
 apt-get -y install python3-pip pipx
 
 # Embedded development tools
-apt-get -y -qq install build-essential curl qemu qemu-system-aarch64 qemu-user \
-	util-linux bridge-utils qemu-utils virtinst libvirt-daemon-system \
-	virtinst unzip rsync findutils bzr cvs
+apt-get -y -qq install build-essential curl util-linux bridge-utils \
+	unzip rsync findutils
+
+apt-get -y -qq install --no-install-recommends \
+	qemu-system-aarch64 qemu-user qemu-utils libvirt-daemon-system virtinst \
+	bzr cvs  # required for some yocto pkgs
 
 # NuttX deps
 apt-get -y -qq install gettext libncursesw5-dev automake  \
