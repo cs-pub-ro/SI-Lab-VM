@@ -11,8 +11,8 @@ INIT_GOAL = labvm
 SUDO ?= sudo
 
 # Fresh Ubuntu Server base VM
-$(call vm_new_base_ubuntu,base)
-base-ver = 22
+$(call vm_new_base_debian,base)
+base-ver = 13
 
 # SI Lab VM
 labvm-ver = $(SI_LABVM_VERSION)

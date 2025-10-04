@@ -8,6 +8,8 @@
 pkg_install build-essential curl util-linux bridge-utils unzip rsync findutils
 pkg_install python3-pip pipx
 
+pkg_remove gcc-multilib
+
 pkg_install --no-install-recommends \
 	qemu-system-aarch64 qemu-user qemu-utils libvirt-daemon-system virtinst \
 	bzr cvs  # required for some yocto pkgs
@@ -15,7 +17,7 @@ pkg_install --no-install-recommends \
 # NuttX deps
 pkg_install gettext libncursesw5-dev automake  \
 	libtool pkg-config gperf genromfs libgmp-dev libmpc-dev libmpfr-dev libisl-dev \
-	binutils-dev libelf-dev libexpat-dev gcc-multilib g++-multilib picocom u-boot-tools \
+	binutils-dev libelf-dev libexpat-dev picocom u-boot-tools \
 	chrony libusb-dev libusb-1.0.0-dev python3-pip kconfig-frontends-nox
 
 # Linux kernel dependencies
@@ -32,7 +34,7 @@ pkg_install crossbuild-essential-arm64 debootstrap binfmt-support qemu-user-stat
 pkg_install gawk wget git diffstat unzip texinfo gcc build-essential \
 	chrpath socat cpio python3 python3-pip python3-pexpect xz-utils debianutils \
 	iputils-ping python3-git python3-jinja2 python3-pylint-common python3-subunit \
-	zstd liblz4-tool
+	zstd lz4
 
 # NFS & TFTP server
 pkg_install nfs-kernel-server tftpd-hpa
