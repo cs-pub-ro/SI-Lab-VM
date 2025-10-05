@@ -23,13 +23,13 @@ labvm-prefix = SI_$(labvm-ver)
 $(call vm_new_layer_full_featured,labvm)
 labvm-name = $(labvm-prefix)
 labvm-src-from = base
-labvm-copy-scripts += $(abspath ./lab/scripts)/
+labvm-copy-scripts += $(abspath ./labvm)/
 labvm-extra-rules += $(vm_zerofree_rule)
 
 $(call vm_new_layer_generic,bigvm)
 bigvm-name = $(labvm-prefix)_Big
 bigvm-src-from = labvm
-bigvm-copy-scripts = $(abspath ./lab/scripts)/
+bigvm-copy-scripts = $(abspath ./labvm)/
 bigvm-script-stage1 += bigvm-scripts.d
 bigvm-packer-args += -var 'disk_size=102400'
 bigvm-extra-rules += $(vm_zerofree_rule)
