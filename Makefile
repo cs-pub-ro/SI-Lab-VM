@@ -21,6 +21,7 @@ labvm-prefix = SI_$(labvm-ver)
 $(call vm_new_layer_full_featured,labvm)
 labvm-name = $(labvm-prefix)
 labvm-src-from = base
+labvm-packer-args += -var 'disk_size=102400'
 labvm-copy-scripts += $(abspath ./lab/scripts)/
 labvm-extra-rules += $(vm_zerofree_rule)
 
@@ -28,7 +29,6 @@ labvm-extra-rules += $(vm_zerofree_rule)
 localvm-name = $(labvm-prefix)_Local
 localvm-type = vm-combo
 localvm-vmname = SI $(labvm-ver) VM
-localvm-packer-args = -var 'disk_size=102400'
 localvm-src-from = labvm
 localvm-extra-rules += $(vm_zerofree_rule)
 
@@ -39,7 +39,7 @@ cloud-src-from = labvm
 cloud-extra-rules += $(vm_zerofree_rule)
 
 # list with all VMs to generate rules for (note: use dependency ordering!)
-build-vms += base labvm release cloud
+build-vms += base labvm localvm cloud
 
 $(call vm_eval_all_rules)
 
