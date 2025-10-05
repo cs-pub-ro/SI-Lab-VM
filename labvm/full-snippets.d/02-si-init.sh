@@ -2,7 +2,7 @@
 [[ -n "$__INSIDE_VM_RUNNER" ]] || { echo "Only call within VM runner!" >&2; return 1; }
 # SI Lab VM configuration vars
 
-LAB_VM_SRC=$(sh_get_script_path)/..
+LAB_VM_SRC=$(realpath $(sh_get_script_path)/..)
 
 # Enable some features from the full_featured layer
 VM_LEGACY_IFNAMES=1
