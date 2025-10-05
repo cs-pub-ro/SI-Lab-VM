@@ -4,37 +4,41 @@
 
 [[ "$VM_INSTALL" != "null" ]] || exit 0
 
-# Embedded development tools
-pkg_install build-essential curl util-linux bridge-utils unzip rsync findutils
+# Essential tools
+pkg_install build-essential sudo util-linux unzip findutils curl wget \
+		rsync git iputils-ping bridge-utils
 pkg_install python3-pip pipx
 
+# installed by 32-dev-tools.sh (full-feature layer), use Debian's crossbuild
 pkg_remove gcc-multilib
+pkg_install crossbuild-essential-arm64 
 
-pkg_install --no-install-recommends \
-	qemu-system-aarch64 qemu-user qemu-utils libvirt-daemon-system virtinst \
-	bzr cvs  # required for some yocto pkgs
+# virtualization / containerization utils
+pkg_install --no-install-recommends qemu-system-aarch64 qemu-user qemu-utils \
+	binfmt-support qemu-user-static libvirt-daemon-system virtinst \
+	systemd-container
+
+# debian packaging tools
+pkg_install fakeroot devscripts debhelper-compat dh-exec dh-python quilt \
+	debootstrap debianutils
+
+# Linux kernel dependencies
+pkg_install  flex bc bison xz-utils cpio kmod libssl-dev \
+	libncurses-dev libncurses5-dev libelf-dev device-tree-compiler
+# newer kernels require libssl-dev for target architecture (arm64)
+dpkg --add-architecture armhf && dpkg --add-architecture arm64
+apt-get update && apt-get -y install libssl-dev:arm64 libssl-dev:armhf
 
 # NuttX deps
 pkg_install gettext libncursesw5-dev automake  \
 	libtool pkg-config gperf genromfs libgmp-dev libmpc-dev libmpfr-dev libisl-dev \
 	binutils-dev libelf-dev libexpat-dev picocom u-boot-tools \
-	chrony libusb-dev libusb-1.0.0-dev python3-pip kconfig-frontends-nox
+	chrony libusb-dev libusb-1.0.0-dev kconfig-frontends-nox
 
-# Linux kernel dependencies
-pkg_install git fakeroot build-essential \
-	libncurses5-dev libncurses-dev ncurses-dev xz-utils cpio \
-	libssl-dev libelf-dev flex bc bison
-
-# Debian packaging dependencies
-pkg_install debhelper-compat dh-exec dh-python quilt
-# Cross-build / bootstrapping tools
-pkg_install crossbuild-essential-arm64 debootstrap binfmt-support qemu-user-static
-
-# Yocto Linux Dependencies
-pkg_install gawk wget git diffstat unzip texinfo gcc build-essential \
-	chrpath socat cpio python3 python3-pip python3-pexpect xz-utils debianutils \
-	iputils-ping python3-git python3-jinja2 python3-pylint-common python3-subunit \
-	zstd lz4
+# Buildroot / Yocto Linux Dependencies
+pkg_install gawk wget diffstat texinfo chrpath socat cpio python3-pexpect \
+	python3-git python3-jinja2 python3-pylint-common python3-subunit \
+	zstd lz4 bzr cvs
 
 # NFS & TFTP server
 pkg_install nfs-kernel-server tftpd-hpa
@@ -48,6 +52,6 @@ EOF
 
 # install fetch.sh tool
 FETCH_SCRIPT_URL="https://raw.githubusercontent.com/niflostancu/release-fetch-script/master/fetch.sh"
-sudo wget -O /usr/local/bin/fetch.sh "$FETCH_SCRIPT_URL"
+wget -O /usr/local/bin/fetch.sh "$FETCH_SCRIPT_URL"
 chmod +x /usr/local/bin/fetch.sh
 
