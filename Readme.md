@@ -11,11 +11,10 @@ Requirements:
 
 ## Preparation
 
-Download and save a [Ubuntu 22.04 Live Server
-install](http://cdimage.ubuntu.com/releases/22.04.1/release/) iso image.
+Download and save a [Debian 13 netinst](https://www.debian.org/CD/http-ftp/) iso image.
 
-Copy `local.sample.mk` as `local.mk` and edit it to point to the downloaded
-Ubuntu Server `.iso` on your disk. You might also want to change `TMP_DIR`
+Copy `config.sample.mk` as `config.local.mk` and edit it to point to the directory
+where the downloaded `.iso` files are. You might also want to change `TMP_DIR`
 somewhere with 10GB free space and/or a faster drive (SSD recommended :P).
 
 You might also want to ensure that packer and qemu are properly installed and
@@ -26,12 +25,12 @@ configured.
 The following Makefile goals are available (the build process is usually in this
 order):
 
-- `base`: builds a base Ubuntu 18.04 install (required for the VM image);
+- `base`: builds a base Ubuntu/Debian install (required for the VM image);
 - `labvm`: builds the Lab VM with all required scripts and config;
-- `yoctovm`: builds the Yocto Lab VM (note: it's very large);
-- `[*]vm_edit`: easily edit an already build Lab VM (uses the previous
+- `localvm`: builds the Local VM projects (VMWare & VirtualBox);
+- `[*]_edit`: easily edit an already build Lab VM (uses the previous
   image as backing snapshot);
-- `[*]vm_commit`: commits the edited VM back to its backing image;
+- `[*]_commit`: commits the edited VM back to its backing image;
 - `[*]_clean`: removes the generated image(s);
 - `ssh`: SSH-es into a running Packer VM;
 
@@ -48,4 +47,3 @@ letting you inspect the VM inside qemu):
 ```sh
 make PAUSE=1 DEBUG=1 labvm_edit
 ```
-
