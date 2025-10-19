@@ -12,7 +12,8 @@ pkg_install python3-pip pipx
 if uname -m | grep x86_64 >/dev/null; then
 	# installed by 32-dev-tools.sh (full-feature layer), use Debian's crossbuild
 	pkg_remove gcc-multilib
-	pkg_install crossbuild-essential-arm64 qemu-system-aarch64
+	pkg_install --no-install-recommends \
+		crossbuild-essential-arm64 qemu-system-aarch64
 fi
 
 # virtualization / containerization utils
