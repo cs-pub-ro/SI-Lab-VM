@@ -30,10 +30,12 @@ pkg_install nodejs npm
 GH_ARCH=x86_64
 if uname -m | grep x86_64 >/dev/null; then
 	curl -LO https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep_14.1.1-1_amd64.deb
-	dpkg -i ripgrep_14.1.1-1_amd64.deb
+	dpkg -i ripgrep_*_amd64.deb
+	rm -f ripgrep*.deb
 elif uname -m | grep aarch64 >/dev/null; then
 	curl -LO https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-aarch64-unknown-linux-gnu.tar.gz
 	tar -xf ripgrep-*-aarch64-*.tar.gz --strip-components=1 -C /usr/local/bin --wildcards '*/rg'
+	rm -f ripgrep-*-aarch64-*.tar.gz
 fi
 
 # install esptool globally (+ pyserial for optional CLI)
