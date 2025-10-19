@@ -9,12 +9,14 @@ pkg_install build-essential sudo util-linux unzip findutils curl wget \
 		rsync git iputils-ping bridge-utils
 pkg_install python3-pip pipx
 
-# installed by 32-dev-tools.sh (full-feature layer), use Debian's crossbuild
-pkg_remove gcc-multilib
-pkg_install crossbuild-essential-arm64 
+if uname -m | grep x86_64 >/dev/null; then
+	# installed by 32-dev-tools.sh (full-feature layer), use Debian's crossbuild
+	pkg_remove gcc-multilib
+	pkg_install crossbuild-essential-arm64 qemu-system-aarch64
+fi
 
 # virtualization / containerization utils
-pkg_install --no-install-recommends qemu-system-aarch64 qemu-user qemu-utils \
+pkg_install --no-install-recommends qemu-user qemu-utils \
 	binfmt-support qemu-user-static libvirt-daemon-system virtinst \
 	systemd-container
 
@@ -25,9 +27,11 @@ pkg_install fakeroot devscripts debhelper-compat dh-exec dh-python quilt \
 # Linux kernel dependencies
 pkg_install  flex bc bison xz-utils cpio kmod libssl-dev \
 	libncurses-dev libncurses5-dev libelf-dev device-tree-compiler
-# newer kernels require libssl-dev for target architecture (arm64)
-dpkg --add-architecture armhf && dpkg --add-architecture arm64
-apt-get update && apt-get -y install libssl-dev:arm64 libssl-dev:armhf
+if uname -m | grep x86_64 >/dev/null; then
+	# newer kernels require libssl-dev for target architecture (arm64)
+	dpkg --add-architecture armhf && dpkg --add-architecture arm64
+	apt-get update && apt-get -y install libssl-dev:arm64 libssl-dev:armhf
+fi
 
 # NuttX deps
 pkg_install gettext libncursesw5-dev automake  \

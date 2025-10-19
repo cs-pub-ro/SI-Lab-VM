@@ -9,15 +9,13 @@ include $(FRAMEWORK_DIR)/lib/inc_all.mk
 DEFAULT_GOAL = labvm
 INIT_GOAL = labvm
 SUDO ?= sudo
-# debian uses partition #1 as rootfs
-export ZEROFREE_PART_NUM=1
 
 # Fresh Ubuntu Server base VM
 $(call vm_new_base_debian,base)
 base-ver = 13
 
 # SI Lab VM
-labvm-ver = $(SI_LABVM_VERSION)
+labvm-ver = $(SI_LABVM_VERSION)$(ARCH_SUFFIX)
 labvm-prefix = SI_$(labvm-ver)
 # VM with ISC lab customizations
 $(call vm_new_layer_full_featured,labvm)

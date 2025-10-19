@@ -24,11 +24,17 @@ echo 'export PATH=/opt/nvim-linux-x86_64/bin:$PATH' > /etc/profile.d/30-nvim.sh
 export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 
 # unfortunately, nvim plugins require nodejs + npm :| 
-apt-get install -y nodejs npm
+pkg_install nodejs npm
 
 # install ripgrep
-curl -LO https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep_14.1.1-1_amd64.deb
-dpkg -i ripgrep_14.1.1-1_amd64.deb
+GH_ARCH=x86_64
+if uname -m | grep x86_64 >/dev/null; then
+	curl -LO https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep_14.1.1-1_amd64.deb
+	dpkg -i ripgrep_14.1.1-1_amd64.deb
+elif uname -m | grep aarch64 >/dev/null; then
+	curl -LO https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-aarch64-unknown-linux-gnu.tar.gz
+	tar -xf ripgrep-*-aarch64-*.tar.gz --strip-components=1 -C /usr/local/bin --wildcards '*/rg'
+fi
 
 # install req. tools for the student user
 function _install_user_config() {
