@@ -34,7 +34,7 @@ if uname -m | grep x86_64 >/dev/null; then
 fi
 
 # NuttX deps
-pkg_install gettext libncursesw5-dev automake  \
+pkg_install gettext libncursesw5-dev automake xxd \
 	libtool pkg-config gperf genromfs libgmp-dev libmpc-dev libmpfr-dev libisl-dev \
 	binutils-dev libelf-dev libexpat-dev picocom u-boot-tools \
 	chrony libusb-dev libusb-1.0.0-dev kconfig-frontends-nox
