@@ -36,12 +36,13 @@ elif uname -m | grep aarch64 >/dev/null; then
 	tar -xf ripgrep-*-aarch64-*.tar.gz --strip-components=1 -C /usr/local/bin --wildcards '*/rg'
 fi
 
+# install esptool globally (+ pyserial for optional CLI)
+pipx install --global esptool
+pipx install --global pyserial
+
 # install req. tools for the student user
 function _install_user_config() {
 	set -e
-	pipx ensurepath
-	pipx install esptool
-	pipx install pyserial
 
 	# copy skel over (since user was created previous to installing files)
 	rsync -a --chmod=750 "/etc/skel/" "$HOME/"
@@ -50,6 +51,10 @@ function _install_user_config() {
 
 	# run zsh to install plugins
 	zsh -i -c 'source ~/.zshrc; exit 0'
+
+	# ensure pipx path
+	pipx ensurepath
+	zsh -c 'pipx ensurepath'
 
 	# set git identities
 	git config --global user.email "$USER@si-lab-vm.local"
