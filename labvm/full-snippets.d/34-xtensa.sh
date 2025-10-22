@@ -3,7 +3,11 @@
 
 [[ "$VM_INSTALL" != "null" ]] || exit 0
 
-ESP_CROSSTOOL_DEST="/opt/xtensa/xtensa-esp-elf"
+XTENSA_GCC_VER=${XTENSA_GCC_VER:-14}
+XTENSA_ESP_FAMILY=${XTENSA_ESP_FAMILY:-esp}
+
+ESP_DIRNAME="xtensa-$XTENSA_ESP_FAMILY-elf"
+ESP_CROSSTOOL_DEST="/opt/xtensa/$ESP_DIRNAME"
 # skip task if already done
 if [[ -d "$ESP_CROSSTOOL_DEST" ]]; then return 0; fi
 
@@ -14,11 +18,13 @@ fi
 
 # Download & install XTensa cross-compiler
 ESP_CROSSTOOL_REL="https://github.com/espressif/crosstool-NG/releases/"
-ESP_VER=$(fetch.sh --download=/tmp/nvim-linux.tar.gz "$ESP_CROSSTOOL_REL#prefix=esp-14." | head -1)
+ESP_VER=$(fetch.sh --download=/tmp/nvim-linux.tar.gz "$ESP_CROSSTOOL_REL#prefix=esp-$XTENSA_GCC_VER." | head -1)
 if [[ -z "$ESP_VER" ]]; then sh_log_fatal "Could not fetch ESP crosstool-NG version!"; fi
 # remove `esp-` prefix from GH tag name
 ESP_VER=${ESP_VER#esp-}
-ESP_CROSSTOOL_URL="$ESP_CROSSTOOL_REL/download/esp-$ESP_VER/xtensa-esp-elf-$ESP_VER-$ESP_HOST_ARCH-linux-gnu.tar.xz"
+
+ESP_XC_ARCHIVE="$ESP_DIRNAME-$ESP_VER-$ESP_HOST_ARCH-linux-gnu.tar.xz"
+ESP_CROSSTOOL_URL="$ESP_CROSSTOOL_REL/download/esp-$ESP_VER/$ESP_XC_ARCHIVE"
 
 echo "Download URL: $ESP_CROSSTOOL_URL"
 ESP_CROSSTOOL_ARCHIVE=/tmp/xtensa-esp-crosschain.tar.xz
