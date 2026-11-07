@@ -1,3 +1,6 @@
 [submodule "framework"]
 	path = framework
 	url = https://github.com/cs-pub-ro/labvm-framework.git
+[submodule "labvm/files/labvm-dotfiles"]
+	path = labvm/files/labvm-dotfiles
+	url = https://github.com/cs-pub-ro/labvm-dotfiles.git

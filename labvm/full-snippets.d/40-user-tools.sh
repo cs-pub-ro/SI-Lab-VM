@@ -6,22 +6,15 @@
 # give student user permissions to serial devices
 usermod -a -G dialout student
 
-# copy default files to /etc/skel
-rsync -a --chown=root:root --chmod=755 "$LAB_VM_SRC/files/etc/skel/" "/etc/skel/"
-# clone fzf
-if [[ ! -d /etc/skel/.fzf/.git ]]; then
-	git clone --depth 1 https://github.com/junegunn/fzf.git /etc/skel/.fzf/
-fi
-
 # install neovim
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
 rm -rf /opt/nvim*
 tar -C /opt -xzf nvim-linux-x86_64.tar.gz
 rm -f nvim-linux-x86_64.tar.gz
+# make nvim available in non-login shells (e.g. `su`) as well
+ln -sf /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/nvim
 
 echo 'export PATH=/opt/nvim-linux-x86_64/bin:$PATH' > /etc/profile.d/30-nvim.sh
-
-export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 
 # unfortunately, nvim plugins require nodejs + npm :| 
 pkg_install nodejs npm
@@ -49,17 +42,14 @@ SUBSYSTEM=="usb", ATTRS{idVendor}=="303a", MODE="0660", GROUP="dialout"
 EOF
 udevadm control --reload-rules
 
-# install req. tools for the student user
+# install labvm-dotfiles + req. tools for the student user
 function _install_user_config() {
 	set -e
 
-	# copy skel over (since user was created previous to installing files)
-	rsync -a --chmod=750 "/etc/skel/" "$HOME/"
-	# install fzf
-	yes | "$HOME/.fzf/install"
-
-	# run zsh to install plugins
-	zsh -i -c 'source ~/.zshrc; exit 0'
+	# install labvm-dotfiles (bash/zsh/nvim/tmux/fzf configs)
+	# `fetch` component skipped: fetch.sh is installed system-wide
+	DOTFILES_ARGS=(-fetch)
+	"$LAB_VM_SRC/files/labvm-dotfiles/install.sh" "${DOTFILES_ARGS[@]}"
 
 	# ensure pipx path
 	pipx ensurepath
@@ -68,16 +58,6 @@ function _install_user_config() {
 	# set git identities
 	git config --global user.email "$USER@si-lab-vm.local"
 	git config --global user.name "SI ${USER}"
-
-	if [[ "$VM_DEBUG" -gt 1 ]]; then
-		[[ -d hectorwatch-nuttx ]] || \
-			git clone https://github.com/radupascale/hectorwatch-nuttx.git hectorwatch-nuttx
-		(
-			cd hectorwatch-nuttx
-			git submodule init
-			git submodule update
-		)
-	fi
 }
 _exported_script="$(declare -p LAB_VM_SRC); $(declare -f _install_user_config)"
 for u in student root; do
