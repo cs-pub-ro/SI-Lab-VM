@@ -2,7 +2,7 @@
 [[ -n "$__INSIDE_VM_RUNNER" ]] || { echo "Only call within VM runner!" >&2; return 1; }
 # Installs debian packages
 
-[[ "$VM_INSTALL" != "null" ]] || exit 0
+[[ "$VM_INSTALL" != "null" ]] || return 0
 
 # Essential tools
 pkg_install build-essential sudo util-linux unzip findutils curl wget \

@@ -1,8 +1,8 @@
 #!/bin/bash
 [[ -n "$__INSIDE_VM_RUNNER" ]] || { echo "Only call within VM runner!" >&2; return 1; }
 
-[[ "$VM_INSTALL" != "null" ]] || exit 0
-[[ "$XTENSA_INSTALL" == "1" ]] || exit 0
+[[ "$VM_INSTALL" != "null" ]] || return 0
+[[ "$XTENSA_INSTALL" == "1" ]] || return 0
 
 XTENSA_GCC_VER=${XTENSA_GCC_VER:-14}
 XTENSA_ESP_FAMILY=${XTENSA_ESP_FAMILY:-esp}

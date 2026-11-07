@@ -1,7 +1,7 @@
 #!/bin/bash
 [[ -n "$__INSIDE_VM_RUNNER" ]] || { echo "Only call within VM runner!" >&2; return 1; }
 
-[[ "$VM_INSTALL" != "null" ]] || exit 0
+[[ "$VM_INSTALL" != "null" ]] || return 0
 
 # give student user permissions to serial devices
 usermod -a -G dialout student

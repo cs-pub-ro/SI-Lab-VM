@@ -2,8 +2,8 @@
 [[ -n "$__INSIDE_VM_RUNNER" ]] || { echo "Only call within VM runner!" >&2; return 1; }
 # Zephyr RTOS prerequisites (ESP32-S3)
 
-[[ "$VM_INSTALL" != "null" ]] || exit 0
-[[ "$ZEPHYR_INSTALL" == "1" ]] || exit 0
+[[ "$VM_INSTALL" != "null" ]] || return 0
+[[ "$ZEPHYR_INSTALL" == "1" ]] || return 0
 
 # Zephyr getting-started system dependencies (Ubuntu)
 pkg_install cmake ninja-build ccache gperf diffutils cpio socat xxd \
