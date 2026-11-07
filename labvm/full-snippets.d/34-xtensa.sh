@@ -2,6 +2,7 @@
 [[ -n "$__INSIDE_VM_RUNNER" ]] || { echo "Only call within VM runner!" >&2; return 1; }
 
 [[ "$VM_INSTALL" != "null" ]] || exit 0
+[[ "$XTENSA_INSTALL" == "1" ]] || exit 0
 
 XTENSA_GCC_VER=${XTENSA_GCC_VER:-14}
 XTENSA_ESP_FAMILY=${XTENSA_ESP_FAMILY:-esp}
@@ -19,7 +20,7 @@ fi
 # Download & install XTensa cross-compiler
 ESP_CROSSTOOL_REL="https://github.com/espressif/crosstool-NG/releases/"
 ESP_VER=$(fetch.sh --download=/tmp/nvim-linux.tar.gz "$ESP_CROSSTOOL_REL#prefix=esp-$XTENSA_GCC_VER." | head -1)
-if [[ -z "$ESP_VER" ]]; then sh_log_fatal "Could not fetch ESP crosstool-NG version!"; fi
+if [[ -z "$ESP_VER" ]]; then sh_log_panic "Could not fetch ESP crosstool-NG version!"; fi
 # remove `esp-` prefix from GH tag name
 ESP_VER=${ESP_VER#esp-}
 

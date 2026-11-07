@@ -42,6 +42,13 @@ fi
 pipx install --global esptool
 pipx install --global pyserial
 
+# udev rules: grant the student dialout access to all Espressif USB devices
+# (USB Serial/JTAG, ROM-mode bootloader) for flashing without sudo
+cat > /etc/udev/rules.d/80-esp32.rules << 'EOF'
+SUBSYSTEM=="usb", ATTRS{idVendor}=="303a", MODE="0660", GROUP="dialout"
+EOF
+udevadm control --reload-rules
+
 # install req. tools for the student user
 function _install_user_config() {
 	set -e

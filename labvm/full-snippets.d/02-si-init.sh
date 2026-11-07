@@ -16,9 +16,13 @@ VM_USER_TWEAKS=1
 VM_USER_BASH_CONFIGS=1
 VM_USER_ZSH_CONFIGS=1
 
-# use Xtensa ESP32S3 GCC 12
-XTENSA_GCC_VER=12
-XTENSA_ESP_FAMILY=esp32s3
+# set to 1 to install Xtensa toolchain
+XTENSA_INSTALL=
+#XTENSA_GCC_VER=12
+#XTENSA_ESP_FAMILY=esp32s3
+
+# install Zephyr SDK
+ZEPHYR_INSTALL=1
 
 # prepare package manager
 @import 'debian/packages.sh'
