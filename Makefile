@@ -28,7 +28,7 @@ $(call vm_new_layer_generic,bigvm)
 bigvm-name = $(labvm-prefix)_Big
 bigvm-src-from = labvm
 bigvm-copy-scripts = $(abspath ./labvm)/
-bigvm-script-stage1 += bigvm-scripts.d
+bigvm-script-dirs += prepare-bigvm.d
 bigvm-packer-args += -var 'disk_size=102400'
 bigvm-extra-rules += $(vm_zerofree_rule)
 
